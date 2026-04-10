@@ -1,0 +1,5 @@
+{
+  "name": "AlgoViz: Sorting Master",
+  "description": "An interactive sorting algorithm visualizer and learning tool featuring Selection, Insertion, Merge, Quick, Counting, and Bubble sort.",
+  "requestFramePermissions": []
+}
