@@ -19,16 +19,31 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(600);
   const [codeLang, setCodeLang] = useState<keyof CodeSnippets>('python');
+  const [searchTarget, setSearchTarget] = useState<number | null>(null);
   const { t, language } = useLanguage();
 
   const generateNewArray = useCallback(() => {
-    const newArr = Array.from({ length: ARRAY_SIZE }, () => 
+    let newArr = Array.from({ length: ARRAY_SIZE }, () => 
       Math.floor(Math.random() * (MAX_VAL - MIN_VAL + 1)) + MIN_VAL
     );
+    if (algorithm.requiresSorted) {
+      newArr.sort((a, b) => a - b);
+    }
     setInitialArray(newArr);
+
+    if (algorithm.type === 'search') {
+      const pickExisting = Math.random() < 0.7;
+      const target = pickExisting 
+        ? newArr[Math.floor(Math.random() * newArr.length)] 
+        : Math.floor(Math.random() * (MAX_VAL - MIN_VAL + 1)) + MIN_VAL;
+      setSearchTarget(target);
+    } else {
+      setSearchTarget(null);
+    }
+
     setCurrentStepIdx(0);
     setIsPlaying(false);
-  }, []);
+  }, [algorithm.id, algorithm.type, algorithm.requiresSorted]);
 
   useEffect(() => {
     generateNewArray();
@@ -36,10 +51,10 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
 
   useEffect(() => {
     if (initialArray.length === 0) return;
-    const newSteps = algorithm.generateSteps(initialArray, language, codeLang);
+    const newSteps = algorithm.generateSteps(initialArray, language, codeLang, searchTarget ?? undefined);
     setSteps(newSteps);
     setCurrentStepIdx(0);
-  }, [initialArray, algorithm, language, codeLang]);
+  }, [initialArray, algorithm, language, codeLang, searchTarget]);
 
   useEffect(() => {
     let timer: any;
@@ -76,6 +91,8 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
   };
 
   const getBarColor = (index: number) => {
+    if (currentStep.foundIndex !== undefined && currentStep.foundIndex === index) return 'bg-lime-400 ring-2 ring-lime-300 ring-offset-2';
+    if (algorithm.type === 'search' && currentStep.activeIndices.includes(index)) return 'bg-amber-400 ring-2 ring-amber-300';
     if (currentStep.sortedIndices.includes(index)) return 'bg-emerald-500';
     if (currentStep.isSwapping && currentStep.activeIndices.includes(index)) return 'bg-red-500';
     if (index === currentStep.minIdx || index === currentStep.pivotIdx) return 'bg-sky-400 ring-2 ring-sky-300 ring-offset-2';
@@ -154,13 +171,34 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
           </div>
           
           {/* Legend */}
-          <div className="flex flex-wrap gap-4 mb-8 text-xs text-slate-500 font-medium">
+          <div className="flex flex-wrap gap-4 mb-4 text-xs text-slate-500 font-medium">
             <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-slate-300"></div> {t('legendUnsorted')}</div>
-            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-sky-400 ring-1 ring-sky-300 ring-offset-1"></div> {t('legendPivot')}</div>
+            {algorithm.type === 'sort' && <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-sky-400 ring-1 ring-sky-300 ring-offset-1"></div> {t('legendPivot')}</div>}
             <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-sky-300"></div> {t('legendComparing')}</div>
-            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-red-500"></div> {t('legendSwapping')}</div>
-            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div> {t('legendSorted')}</div>
+            {algorithm.type === 'sort' && <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-red-500"></div> {t('legendSwapping')}</div>}
+            {algorithm.type === 'sort' && <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div> {t('legendSorted')}</div>}
+            {algorithm.type === 'search' && <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-lime-400 ring-1 ring-lime-300 ring-offset-1"></div> {t('foundText')}</div>}
           </div>
+
+          {algorithm.type === 'search' && (
+            <div className="flex items-center gap-3 mb-4 bg-amber-50 text-amber-800 p-3 rounded-lg border border-amber-200">
+              <label htmlFor="search-target" className="font-semibold text-sm">{t('targetLabel')}</label>
+              <input 
+                id="search-target"
+                type="number"
+                value={searchTarget ?? ''}
+                disabled={isPlaying}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSearchTarget(val === '' ? null : Number(val));
+                }}
+                className="w-20 px-2 py-1 bg-white border border-amber-300 rounded text-amber-900 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-60"
+              />
+              {algorithm.requiresSorted && (
+                <span className="text-xs ml-auto opacity-75">{t('requiresSortedNote')}</span>
+              )}
+            </div>
+          )}
 
           {/* Bars Container */}
           <div className="flex-1 flex items-end justify-center gap-2 md:gap-3 h-64 md:h-80 min-h-[300px] border-b border-slate-100 pb-2">

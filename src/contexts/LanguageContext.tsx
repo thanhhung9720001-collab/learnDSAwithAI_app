@@ -9,8 +9,10 @@ interface Dictionary {
 const translations: Record<Language, Dictionary> = {
   vi: {
     // App Sidebar & Footer
-    "subtitle": "Sorting Master",
-    "algorithmGroup": "Thuật toán sắp xếp",
+    "subtitle": "Sorting & Searching Master",
+    "algorithmGroup": "Thuật toán sắp xếp", // Backward compatibility
+    "sortingGroup": "THUẬT TOÁN SẮP XẾP",
+    "searchingGroup": "THUẬT TOÁN TÌM KIẾM",
     "sourceCode": "Mã nguồn dự án",
     "aboutTab": "Về AlgoViz",
     "aboutText": "AlgoViz là một công cụ trực quan hóa giúp bạn hiểu rõ cách thức hoạt động của các thuật toán sắp xếp phổ biến thông qua việc mô phỏng từng bước thực thi.",
@@ -37,14 +39,20 @@ const translations: Record<Language, Dictionary> = {
     "legendSwapping": "Đang hoán đổi",
     "legendSorted": "Đã sắp xếp",
     "countArray": "Mảng đếm (Count Array)",
+    "targetLabel": "Mục tiêu tìm kiếm:",
+    "foundText": "Đã tìm thấy",
+    "notFoundText": "Không tìm thấy",
+    "requiresSortedNote": "(Chỉ áp dụng cho mảng đã sắp xếp)",
     "explanation": "GIẢI THÍCH",
     "preparing": "Đang chuẩn bị...",
     "pythonCode": "PYTHON CODE"
   },
   en: {
     // App Sidebar & Footer
-    "subtitle": "Sorting Master",
-    "algorithmGroup": "Sorting Algorithms",
+    "subtitle": "Sorting & Searching Master",
+    "algorithmGroup": "Sorting Algorithms", // Backward comp
+    "sortingGroup": "SORTING ALGORITHMS",
+    "searchingGroup": "SEARCHING ALGORITHMS",
     "sourceCode": "View Source Code",
     "aboutTab": "About AlgoViz",
     "aboutText": "AlgoViz is a visualizer tool that helps you understand how common sorting algorithms work by simulating step-by-step execution.",
@@ -71,6 +79,10 @@ const translations: Record<Language, Dictionary> = {
     "legendSwapping": "Swapping",
     "legendSorted": "Sorted",
     "countArray": "Count Array",
+    "targetLabel": "Target Element:",
+    "foundText": "Found",
+    "notFoundText": "Not Found",
+    "requiresSortedNote": "(Only applies to sorted arrays)",
     "explanation": "EXPLANATION",
     "preparing": "Preparing...",
     "pythonCode": "PYTHON CODE"

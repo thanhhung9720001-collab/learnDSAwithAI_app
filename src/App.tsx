@@ -66,26 +66,54 @@ export default function App() {
             </button>
           </div>
 
-          <nav className="flex-1 space-y-1">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 px-3">{t('algorithmGroup')}</p>
-            {ALGORITHMS.map((algo) => (
-              <button
-                key={algo.id}
-                onClick={() => {
-                  setSelectedAlgoId(algo.id);
-                  setIsSidebarOpen(false);
-                }}
-                className={`
-                  w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 group
-                  ${selectedAlgoId === algo.id 
-                    ? 'bg-slate-900 text-white shadow-md shadow-slate-200' 
-                    : 'text-slate-600 hover:bg-slate-100'}
-                `}
-              >
-                <span className="font-medium">{algo.name}</span>
-                <ChevronRight size={16} className={`transition-transform duration-200 ${selectedAlgoId === algo.id ? 'translate-x-0 opacity-100' : '-translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100'}`} />
-              </button>
-            ))}
+          <nav className="flex-1 space-y-4 overflow-y-auto pb-4">
+            <div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-3">{t('sortingGroup')}</p>
+              <div className="space-y-1">
+                {ALGORITHMS.filter(a => a.type === 'sort').map((algo) => (
+                  <button
+                    key={algo.id}
+                    onClick={() => {
+                      setSelectedAlgoId(algo.id);
+                      setIsSidebarOpen(false);
+                    }}
+                    className={`
+                      w-full flex items-center justify-between px-4 py-2.5 rounded-xl transition-all duration-200 group text-sm
+                      ${selectedAlgoId === algo.id 
+                        ? 'bg-slate-900 text-white shadow-md shadow-slate-200' 
+                        : 'text-slate-600 hover:bg-slate-100'}
+                    `}
+                  >
+                    <span className="font-medium">{algo.name}</span>
+                    <ChevronRight size={16} className={`transition-transform duration-200 ${selectedAlgoId === algo.id ? 'translate-x-0 opacity-100' : '-translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100'}`} />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-3 mt-4">{t('searchingGroup')}</p>
+              <div className="space-y-1">
+                {ALGORITHMS.filter(a => a.type === 'search').map((algo) => (
+                  <button
+                    key={algo.id}
+                    onClick={() => {
+                      setSelectedAlgoId(algo.id);
+                      setIsSidebarOpen(false);
+                    }}
+                    className={`
+                      w-full flex items-center justify-between px-4 py-2.5 rounded-xl transition-all duration-200 group text-sm
+                      ${selectedAlgoId === algo.id 
+                        ? 'bg-slate-900 text-white shadow-md shadow-slate-200' 
+                        : 'text-slate-600 hover:bg-slate-100'}
+                    `}
+                  >
+                    <span className="font-medium">{algo.name}</span>
+                    <ChevronRight size={16} className={`transition-transform duration-200 ${selectedAlgoId === algo.id ? 'translate-x-0 opacity-100' : '-translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100'}`} />
+                  </button>
+                ))}
+              </div>
+            </div>
           </nav>
 
           <div className="mt-auto pt-6 border-t border-slate-100">
@@ -128,11 +156,11 @@ export default function App() {
               <div className="bg-white p-3 rounded-lg border border-slate-200 text-xs font-mono">
                 <div className="flex justify-between py-1 border-b border-slate-50">
                   <span>{t('avgTime')}</span>
-                  <span className="text-sky-600 font-bold">O(n log n)</span>
+                  <span className="text-sky-600 font-bold">{selectedAlgo.complexities?.time || 'N/A'}</span>
                 </div>
                 <div className="flex justify-between py-1">
                   <span>{t('memory')}</span>
-                  <span className="text-emerald-600 font-bold">O(1)</span>
+                  <span className="text-emerald-600 font-bold">{selectedAlgo.complexities?.space || 'N/A'}</span>
                 </div>
               </div>
             </div>

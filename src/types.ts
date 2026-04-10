@@ -3,6 +3,7 @@ export interface Step {
   activeIndices: number[];
   minIdx?: number | null;
   pivotIdx?: number | null;
+  foundIndex?: number | null;
   sortedIndices: number[];
   isSwapping: boolean;
   activeLines: number[];
@@ -21,6 +22,12 @@ export interface CodeSnippets {
 export interface Algorithm {
   id: string;
   name: string;
+  type: 'sort' | 'search';
+  requiresSorted?: boolean;
+  complexities?: {
+    time: string;
+    space: string;
+  };
   codes: CodeSnippets;
-  generateSteps: (arr: number[], textLang?: string, codeLang?: string) => Step[];
+  generateSteps: (arr: number[], textLang?: string, codeLang?: string, target?: number) => Step[];
 }

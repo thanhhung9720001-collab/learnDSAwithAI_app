@@ -1,4 +1,5 @@
 import { Step, Algorithm, CodeSnippets } from './types';
+import { SEARCH_ALGORITHMS } from './searchAlgorithms';
 
 const getLines = (codeLang: string | undefined, py: number[], js: number[], cpp: number[], java: number[]) => {
   switch (codeLang) {
@@ -738,38 +739,53 @@ const generateCountingSortSteps = (initialArr: number[], textLang: string = 'vi'
 export const ALGORITHMS: Algorithm[] = [
   {
     id: 'selection',
+    type: 'sort',
     name: 'Selection Sort',
+    complexities: { time: 'O(n²)', space: 'O(1)' },
     codes: selectionSortCodes,
     generateSteps: generateSelectionSortSteps
   },
   {
     id: 'insertion',
+    type: 'sort',
     name: 'Insertion Sort',
+    complexities: { time: 'O(n²)', space: 'O(1)' },
     codes: insertionSortCodes,
     generateSteps: generateInsertionSortSteps
   },
   {
     id: 'bubble',
+    type: 'sort',
     name: 'Bubble Sort',
+    complexities: { time: 'O(n²)', space: 'O(1)' },
     codes: bubbleSortCodes,
     generateSteps: generateBubbleSortSteps
   },
   {
     id: 'quick',
+    type: 'sort',
     name: 'Quick Sort',
+    complexities: { time: 'O(n log n)', space: 'O(log n)' },
     codes: quickSortCodes,
     generateSteps: generateQuickSortSteps
   },
   {
     id: 'merge',
+    type: 'sort',
     name: 'Merge Sort',
+    complexities: { time: 'O(n log n)', space: 'O(n)' },
     codes: mergeSortCodes,
     generateSteps: generateMergeSortSteps
   },
   {
     id: 'counting',
+    type: 'sort',
     name: 'Counting Sort',
+    complexities: { time: 'O(n + k)', space: 'O(k)' },
     codes: countingSortCodes,
     generateSteps: generateCountingSortSteps
   }
 ];
+
+// Search codes will be appended here.
+ALGORITHMS.push(...SEARCH_ALGORITHMS);
