@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Play, Pause, SkipForward, RotateCcw, Settings2, Code2, Info } from 'lucide-react';
-import { Algorithm, Step } from '../types';
+import { Algorithm, Step, CodeSnippets } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const ARRAY_SIZE = 12;
@@ -18,6 +18,7 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(600);
+  const [codeLang, setCodeLang] = useState<keyof CodeSnippets>('python');
   const { t, language } = useLanguage();
 
   const generateNewArray = useCallback(() => {
@@ -35,10 +36,10 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
 
   useEffect(() => {
     if (initialArray.length === 0) return;
-    const newSteps = algorithm.generateSteps(initialArray, language);
+    const newSteps = algorithm.generateSteps(initialArray, language, codeLang);
     setSteps(newSteps);
     setCurrentStepIdx(0);
-  }, [initialArray, algorithm, language]);
+  }, [initialArray, algorithm, language, codeLang]);
 
   useEffect(() => {
     let timer: any;
@@ -83,7 +84,8 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
     return 'bg-slate-300';
   };
 
-  const CODE_LINES = algorithm.pythonCode.split('\n');
+  const codeText = algorithm.codes[codeLang] || algorithm.codes.python;
+  const CODE_LINES = codeText.split('\n');
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -225,8 +227,18 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
           <div className="bg-[#0f172a] rounded-2xl shadow-lg border border-slate-800 overflow-hidden flex flex-col">
             <div className="bg-slate-900 px-4 py-3 flex items-center justify-between border-b border-slate-800">
               <span className="text-slate-400 text-[10px] font-bold tracking-widest uppercase flex items-center gap-2">
-                <Code2 size={14} /> {t('pythonCode')}
+                <Code2 size={14} /> SOURCE CODE
               </span>
+              <select 
+                value={codeLang} 
+                onChange={(e) => setCodeLang(e.target.value as keyof CodeSnippets)}
+                className="bg-slate-800 text-slate-300 text-xs font-mono px-2 py-1 rounded outline-none border border-slate-700 hover:border-slate-600 focus:ring-1 focus:ring-sky-500 transition-all cursor-pointer"
+              >
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+              </select>
             </div>
             <div className="p-4 overflow-x-auto text-xs font-mono leading-relaxed">
               {CODE_LINES.map((line, idx) => {
