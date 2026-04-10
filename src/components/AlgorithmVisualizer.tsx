@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Play, Pause, SkipForward, RotateCcw, Settings2, Code2, Info } from 'lucide-react';
 import { Algorithm, Step } from '../types';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const ARRAY_SIZE = 12;
 const MIN_VAL = 10;
@@ -17,6 +18,7 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(600);
+  const { t, language } = useLanguage();
 
   const generateNewArray = useCallback(() => {
     const newArr = Array.from({ length: ARRAY_SIZE }, () => 
@@ -33,10 +35,10 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
 
   useEffect(() => {
     if (initialArray.length === 0) return;
-    const newSteps = algorithm.generateSteps(initialArray);
+    const newSteps = algorithm.generateSteps(initialArray, language);
     setSteps(newSteps);
     setCurrentStepIdx(0);
-  }, [initialArray, algorithm]);
+  }, [initialArray, algorithm, language]);
 
   useEffect(() => {
     let timer: any;
@@ -69,7 +71,7 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
     sortedIndices: [],
     isSwapping: false,
     activeLines: [],
-    explanation: "Đang chuẩn bị..."
+    explanation: t('preparing')
   };
 
   const getBarColor = (index: number) => {
@@ -89,7 +91,7 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">{algorithm.name}</h1>
-          <p className="text-slate-500 mt-1">Trình mô phỏng thuật toán tương tác</p>
+          <p className="text-slate-500 mt-1">{t('simSubtitle')}</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -99,7 +101,7 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
             className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-xl transition-colors disabled:opacity-50 shadow-sm"
           >
             {isPlaying ? <Pause size={18} /> : <Play size={18} />}
-            {isPlaying ? 'Tạm dừng' : 'Phát'}
+            {isPlaying ? t('btnPause') : t('btnPlay')}
           </button>
           <button 
             onClick={stepForward}
@@ -107,20 +109,20 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
             className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-colors border border-slate-200 disabled:opacity-50"
           >
             <SkipForward size={18} />
-            Bước tiếp
+            {t('btnNext')}
           </button>
           <button 
             onClick={handleReset}
             className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-colors border border-slate-200"
           >
             <RotateCcw size={18} />
-            Làm mới
+            {t('btnReset')}
           </button>
           
           <div className="flex items-center gap-3 ml-2 pl-4 border-l border-slate-200">
             <Settings2 size={18} className="text-slate-400" />
             <div className="flex flex-col w-24">
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tốc độ</label>
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">{t('speed')}</label>
               <input 
                 type="range" 
                 min="50" 
@@ -142,20 +144,20 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
         <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-              <Info size={16} /> BIỂU ĐỒ TRỰC QUAN
+              <Info size={16} /> {t('visualChart')}
             </h2>
             <div className="text-xs font-mono text-slate-400">
-              Bước: {currentStepIdx + 1} / {steps.length}
+              {t('step')}: {currentStepIdx + 1} / {steps.length}
             </div>
           </div>
           
           {/* Legend */}
           <div className="flex flex-wrap gap-4 mb-8 text-xs text-slate-500 font-medium">
-            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-slate-300"></div> Chưa xét</div>
-            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-sky-400 ring-1 ring-sky-300 ring-offset-1"></div> Con trỏ/Pivot</div>
-            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-sky-300"></div> Đang so sánh</div>
-            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-red-500"></div> Đang hoán đổi</div>
-            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div> Đã sắp xếp</div>
+            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-slate-300"></div> {t('legendUnsorted')}</div>
+            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-sky-400 ring-1 ring-sky-300 ring-offset-1"></div> {t('legendPivot')}</div>
+            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-sky-300"></div> {t('legendComparing')}</div>
+            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-red-500"></div> {t('legendSwapping')}</div>
+            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div> {t('legendSorted')}</div>
           </div>
 
           {/* Bars Container */}
@@ -182,7 +184,7 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
           {/* Auxiliary Array for Counting Sort */}
           {currentStep.auxiliaryArray && (
             <div className="mt-12 p-4 bg-slate-50 rounded-xl border border-slate-100">
-              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Mảng đếm (Count Array)</h3>
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">{t('countArray')}</h3>
               <div className="flex gap-1 overflow-x-auto pb-2">
                 {currentStep.auxiliaryArray.map((count, idx) => (
                   <div key={idx} className="flex flex-col items-center min-w-[2rem]">
@@ -211,7 +213,7 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
         <div className="flex flex-col gap-6">
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex-1 flex flex-col">
             <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <Info size={16} /> GIẢI THÍCH
+              <Info size={16} /> {t('explanation')}
             </h2>
             <div className="flex-1 flex flex-col">
               <p className="text-slate-700 text-base leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100 min-h-[100px]">
@@ -223,7 +225,7 @@ export default function AlgorithmVisualizer({ algorithm }: Props) {
           <div className="bg-[#0f172a] rounded-2xl shadow-lg border border-slate-800 overflow-hidden flex flex-col">
             <div className="bg-slate-900 px-4 py-3 flex items-center justify-between border-b border-slate-800">
               <span className="text-slate-400 text-[10px] font-bold tracking-widest uppercase flex items-center gap-2">
-                <Code2 size={14} /> PYTHON CODE
+                <Code2 size={14} /> {t('pythonCode')}
               </span>
             </div>
             <div className="p-4 overflow-x-auto text-xs font-mono leading-relaxed">

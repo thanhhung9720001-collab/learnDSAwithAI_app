@@ -15,5 +15,5 @@ export interface Algorithm {
   id: string;
   name: string;
   pythonCode: string;
-  generateSteps: (arr: number[]) => Step[];
+  generateSteps: (arr: number[], lang?: string) => Step[];
 }

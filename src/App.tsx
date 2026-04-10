@@ -4,13 +4,15 @@
  */
 
 import React, { useState } from 'react';
-import { BarChart3, ChevronRight, Github, Menu, X } from 'lucide-react';
+import { BarChart3, ChevronRight, Github, Menu, X, Globe } from 'lucide-react';
 import { ALGORITHMS } from './algorithms';
 import AlgorithmVisualizer from './components/AlgorithmVisualizer';
+import { useLanguage } from './contexts/LanguageContext';
 
 export default function App() {
   const [selectedAlgoId, setSelectedAlgoId] = useState(ALGORITHMS[0].id);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { t, language, setLanguage } = useLanguage();
 
   const selectedAlgo = ALGORITHMS.find(a => a.id === selectedAlgoId) || ALGORITHMS[0];
 
@@ -25,9 +27,17 @@ export default function App() {
           </div>
           <span className="font-bold tracking-tight">AlgoViz</span>
         </div>
-        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 text-slate-600">
-          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')} 
+            className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-slate-100 text-slate-600 text-xs font-bold"
+          >
+            <Globe size={14} /> {language.toUpperCase()}
+          </button>
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 text-slate-600">
+            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Sidebar Navigation */}
@@ -36,18 +46,28 @@ export default function App() {
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="h-full flex flex-col p-6">
-          <div className="hidden md:flex items-center gap-3 mb-10">
-            <div className="bg-slate-900 p-2 rounded-xl shadow-lg shadow-slate-200">
-              <BarChart3 className="text-white" size={24} />
+          <div className="hidden md:flex items-center justify-between mb-10">
+            <div className="flex items-center gap-3">
+              <div className="bg-slate-900 p-2 rounded-xl shadow-lg shadow-slate-200">
+                <BarChart3 className="text-white" size={24} />
+              </div>
+              <div>
+                <h1 className="font-bold text-xl tracking-tight">AlgoViz</h1>
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{t('subtitle')}</p>
+              </div>
             </div>
-            <div>
-              <h1 className="font-bold text-xl tracking-tight">AlgoViz</h1>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Sorting Master</p>
-            </div>
+            
+            <button 
+              onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')} 
+              className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors text-xs font-bold shrink-0 shadow-sm"
+              title="Change Language"
+            >
+              <Globe size={14} /> {language.toUpperCase()}
+            </button>
           </div>
 
           <nav className="flex-1 space-y-1">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 px-3">Thuật toán sắp xếp</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 px-3">{t('algorithmGroup')}</p>
             {ALGORITHMS.map((algo) => (
               <button
                 key={algo.id}
@@ -76,7 +96,7 @@ export default function App() {
               className="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-900 transition-colors text-sm font-medium"
             >
               <Github size={18} />
-              <span>Mã nguồn dự án</span>
+              <span>{t('sourceCode')}</span>
             </a>
           </div>
         </div>
@@ -85,33 +105,33 @@ export default function App() {
       {/* Main Content */}
       <main className="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto">
         <div className="max-w-6xl mx-auto">
-          <AlgorithmVisualizer key={selectedAlgo.id} algorithm={selectedAlgo} />
+          <AlgorithmVisualizer key={`${selectedAlgo.id}-${language}`} algorithm={selectedAlgo} />
           
           {/* Footer Info */}
           <footer className="mt-12 pt-8 border-t border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-8 text-slate-500">
             <div>
-              <h4 className="text-slate-900 font-bold text-sm mb-3">Về AlgoViz</h4>
+              <h4 className="text-slate-900 font-bold text-sm mb-3">{t('aboutTab')}</h4>
               <p className="text-sm leading-relaxed">
-                AlgoViz là một công cụ trực quan hóa giúp bạn hiểu rõ cách thức hoạt động của các thuật toán sắp xếp phổ biến thông qua việc mô phỏng từng bước thực thi.
+                {t('aboutText')}
               </p>
             </div>
             <div>
-              <h4 className="text-slate-900 font-bold text-sm mb-3">Cách sử dụng</h4>
+              <h4 className="text-slate-900 font-bold text-sm mb-3">{t('usageTab')}</h4>
               <ul className="text-sm space-y-2">
-                <li>• Chọn thuật toán từ thanh điều hướng.</li>
-                <li>• Nhấn "Phát" để xem toàn bộ quá trình.</li>
-                <li>• Sử dụng "Bước tiếp" để học kỹ từng dòng code.</li>
+                <li>• {t('usageStep1')}</li>
+                <li>• {t('usageStep2')}</li>
+                <li>• {t('usageStep3')}</li>
               </ul>
             </div>
             <div>
-              <h4 className="text-slate-900 font-bold text-sm mb-3">Độ phức tạp</h4>
+              <h4 className="text-slate-900 font-bold text-sm mb-3">{t('complexityTab')}</h4>
               <div className="bg-white p-3 rounded-lg border border-slate-200 text-xs font-mono">
                 <div className="flex justify-between py-1 border-b border-slate-50">
-                  <span>Trung bình:</span>
+                  <span>{t('avgTime')}</span>
                   <span className="text-sky-600 font-bold">O(n log n)</span>
                 </div>
                 <div className="flex justify-between py-1">
-                  <span>Bộ nhớ:</span>
+                  <span>{t('memory')}</span>
                   <span className="text-emerald-600 font-bold">O(1)</span>
                 </div>
               </div>
@@ -130,4 +150,3 @@ export default function App() {
     </div>
   );
 }
-

@@ -10,7 +10,7 @@ const selectionSortCode = `def selection_sort(arr):
                 min_idx = j
         arr[i], arr[min_idx] = arr[min_idx], arr[i]`;
 
-const generateSelectionSortSteps = (initialArr: number[]): Step[] => {
+const generateSelectionSortSteps = (initialArr: number[], lang: string = 'vi'): Step[] => {
   let arr = [...initialArr];
   let steps: Step[] = [];
   let n = arr.length;
@@ -22,7 +22,7 @@ const generateSelectionSortSteps = (initialArr: number[]): Step[] => {
     sortedIndices: [...sortedIndices],
     isSwapping: false,
     activeLines: [1, 2],
-    explanation: "Khởi tạo mảng và xác định số lượng phần tử (n)."
+    explanation: lang === 'en' ? "Initialize array and determine number of elements (n)." : "Khởi tạo mảng và xác định số lượng phần tử (n)."
   });
 
   for (let i = 0; i < n; i++) {
@@ -34,7 +34,7 @@ const generateSelectionSortSteps = (initialArr: number[]): Step[] => {
       sortedIndices: [...sortedIndices],
       isSwapping: false,
       activeLines: [3, 4],
-      explanation: `Bắt đầu vòng lặp thứ ${i + 1}. Giả sử phần tử nhỏ nhất nằm ở [${i}] (Giá trị: ${arr[i]}).`
+      explanation: lang === 'en' ? `Start loop ${i + 1}. Assume minimum is at [${i}] (Value: ${arr[i]}).` : `Bắt đầu vòng lặp thứ ${i + 1}. Giả sử phần tử nhỏ nhất nằm ở [${i}] (Giá trị: ${arr[i]}).`
     });
 
     for (let j = i + 1; j < n; j++) {
@@ -45,7 +45,7 @@ const generateSelectionSortSteps = (initialArr: number[]): Step[] => {
         sortedIndices: [...sortedIndices],
         isSwapping: false,
         activeLines: [5, 6],
-        explanation: `So sánh [${j}] (${arr[j]}) với phần tử nhỏ nhất hiện tại [${min_idx}] (${arr[min_idx]}).`
+        explanation: lang === 'en' ? `Compare [${j}] (${arr[j]}) with current minimum [${min_idx}] (${arr[min_idx]}).` : `So sánh [${j}] (${arr[j]}) với phần tử nhỏ nhất hiện tại [${min_idx}] (${arr[min_idx]}).`
       });
 
       if (arr[j] < arr[min_idx]) {
@@ -57,7 +57,7 @@ const generateSelectionSortSteps = (initialArr: number[]): Step[] => {
           sortedIndices: [...sortedIndices],
           isSwapping: false,
           activeLines: [7],
-          explanation: `Tìm thấy phần tử nhỏ hơn! Cập nhật min_idx = ${min_idx}.`
+          explanation: lang === 'en' ? `Found smaller element! Update min_idx = ${min_idx}.` : `Tìm thấy phần tử nhỏ hơn! Cập nhật min_idx = ${min_idx}.`
         });
       }
     }
@@ -70,7 +70,7 @@ const generateSelectionSortSteps = (initialArr: number[]): Step[] => {
         sortedIndices: [...sortedIndices],
         isSwapping: true,
         activeLines: [8],
-        explanation: `Hoán đổi phần tử nhỏ nhất [${min_idx}] (${arr[min_idx]}) với vị trí đầu tiên chưa sắp xếp [${i}] (${arr[i]}).`
+        explanation: lang === 'en' ? `Swap minimum [${min_idx}] (${arr[min_idx]}) with first unsorted position [${i}] (${arr[i]}).` : `Hoán đổi phần tử nhỏ nhất [${min_idx}] (${arr[min_idx]}) với vị trí đầu tiên chưa sắp xếp [${i}] (${arr[i]}).`
       });
       [arr[i], arr[min_idx]] = [arr[min_idx], arr[i]];
     }
@@ -81,7 +81,7 @@ const generateSelectionSortSteps = (initialArr: number[]): Step[] => {
       sortedIndices: [...sortedIndices],
       isSwapping: false,
       activeLines: [],
-      explanation: `Phần tử ${arr[i]} đã ở đúng vị trí.`
+      explanation: lang === 'en' ? `Element ${arr[i]} is now in correct sorted position.` : `Phần tử ${arr[i]} đã ở đúng vị trí.`
     });
   }
   return steps;
@@ -97,7 +97,7 @@ const insertionSortCode = `def insertion_sort(arr):
             j -= 1
         arr[j + 1] = key`;
 
-const generateInsertionSortSteps = (initialArr: number[]): Step[] => {
+const generateInsertionSortSteps = (initialArr: number[], lang: string = 'vi'): Step[] => {
   let arr = [...initialArr];
   let steps: Step[] = [];
   let n = arr.length;
@@ -109,7 +109,7 @@ const generateInsertionSortSteps = (initialArr: number[]): Step[] => {
     sortedIndices: [0],
     isSwapping: false,
     activeLines: [1],
-    explanation: "Coi phần tử đầu tiên là đã sắp xếp."
+    explanation: lang === 'en' ? "Assume the first element is already sorted." : "Coi phần tử đầu tiên là đã sắp xếp."
   });
 
   for (let i = 1; i < n; i++) {
@@ -122,7 +122,7 @@ const generateInsertionSortSteps = (initialArr: number[]): Step[] => {
       sortedIndices: [...sortedIndices],
       isSwapping: false,
       activeLines: [2, 3, 4],
-      explanation: `Lấy phần tử [${i}] (${key}) làm 'key' để chèn vào phần đã sắp xếp.`
+      explanation: lang === 'en' ? `Take [${i}] (${key}) as 'key' to insert into sorted part.` : `Lấy phần tử [${i}] (${key}) làm 'key' để chèn vào phần đã sắp xếp.`
     });
 
     while (j >= 0 && arr[j] > key) {
@@ -132,7 +132,7 @@ const generateInsertionSortSteps = (initialArr: number[]): Step[] => {
         sortedIndices: [...sortedIndices],
         isSwapping: true,
         activeLines: [5, 6, 7],
-        explanation: `Vì ${arr[j]} > ${key}, dịch chuyển ${arr[j]} sang phải.`
+        explanation: lang === 'en' ? `Since ${arr[j]} > ${key}, shift ${arr[j]} one position to the right.` : `Vì ${arr[j]} > ${key}, dịch chuyển ${arr[j]} sang phải.`
       });
       arr[j + 1] = arr[j];
       j--;
@@ -146,7 +146,7 @@ const generateInsertionSortSteps = (initialArr: number[]): Step[] => {
       sortedIndices: [...sortedIndices],
       isSwapping: false,
       activeLines: [8],
-      explanation: `Chèn 'key' (${key}) vào vị trí thích hợp [${j + 1}].`
+      explanation: lang === 'en' ? `Insert 'key' (${key}) into suitable position [${j + 1}].` : `Chèn 'key' (${key}) vào vị trí thích hợp [${j + 1}].`
     });
   }
   return steps;
@@ -160,7 +160,7 @@ const bubbleSortCode = `def bubble_sort(arr):
             if arr[j] > arr[j + 1]:
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]`;
 
-const generateBubbleSortSteps = (initialArr: number[]): Step[] => {
+const generateBubbleSortSteps = (initialArr: number[], lang: string = 'vi'): Step[] => {
   let arr = [...initialArr];
   let steps: Step[] = [];
   let n = arr.length;
@@ -174,7 +174,7 @@ const generateBubbleSortSteps = (initialArr: number[]): Step[] => {
         sortedIndices: [...sortedIndices],
         isSwapping: false,
         activeLines: [3, 4],
-        explanation: `So sánh cặp phần tử [${j}] (${arr[j]}) và [${j + 1}] (${arr[j + 1]}).`
+        explanation: lang === 'en' ? `Compare pair [${j}] (${arr[j]}) and [${j + 1}] (${arr[j + 1]}).` : `So sánh cặp phần tử [${j}] (${arr[j]}) và [${j + 1}] (${arr[j + 1]}).`
       });
 
       if (arr[j] > arr[j + 1]) {
@@ -185,7 +185,7 @@ const generateBubbleSortSteps = (initialArr: number[]): Step[] => {
           sortedIndices: [...sortedIndices],
           isSwapping: true,
           activeLines: [5],
-          explanation: `${arr[j + 1]} > ${arr[j]}, tiến hành hoán đổi.`
+          explanation: lang === 'en' ? `${arr[j + 1]} > ${arr[j]}, perform swap.` : `${arr[j + 1]} > ${arr[j]}, tiến hành hoán đổi.`
         });
       }
     }
@@ -196,7 +196,7 @@ const generateBubbleSortSteps = (initialArr: number[]): Step[] => {
       sortedIndices: [...sortedIndices],
       isSwapping: false,
       activeLines: [],
-      explanation: `Phần tử lớn nhất trong lượt này (${arr[n - i - 1]}) đã nổi lên vị trí cuối.`
+      explanation: lang === 'en' ? `Largest element of this pass (${arr[n - i - 1]}) has bubbled up.` : `Phần tử lớn nhất trong lượt này (${arr[n - i - 1]}) đã nổi lên vị trí cuối.`
     });
   }
   return steps;
@@ -219,7 +219,7 @@ def partition(arr, low, high):
     arr[i + 1], arr[high] = arr[high], arr[i + 1]
     return i + 1`;
 
-const generateQuickSortSteps = (initialArr: number[]): Step[] => {
+const generateQuickSortSteps = (initialArr: number[], lang: string = 'vi'): Step[] => {
   let arr = [...initialArr];
   let steps: Step[] = [];
   let sortedIndices: number[] = [];
@@ -235,7 +235,7 @@ const generateQuickSortSteps = (initialArr: number[]): Step[] => {
       sortedIndices: [...sortedIndices],
       isSwapping: false,
       activeLines: [7, 8],
-      explanation: `Chọn pivot là phần tử cuối cùng: ${pivot} tại [${high}].`,
+      explanation: lang === 'en' ? `Choose pivot as the last element: ${pivot} at [${high}].` : `Chọn pivot là phần tử cuối cùng: ${pivot} tại [${high}].`,
       range: [low, high]
     });
 
@@ -247,7 +247,7 @@ const generateQuickSortSteps = (initialArr: number[]): Step[] => {
         sortedIndices: [...sortedIndices],
         isSwapping: false,
         activeLines: [10, 11],
-        explanation: `So sánh [${j}] (${arr[j]}) với pivot (${pivot}).`,
+        explanation: lang === 'en' ? `Compare [${j}] (${arr[j]}) with pivot (${pivot}).` : `So sánh [${j}] (${arr[j]}) với pivot (${pivot}).`,
         range: [low, high]
       });
 
@@ -261,7 +261,7 @@ const generateQuickSortSteps = (initialArr: number[]): Step[] => {
           sortedIndices: [...sortedIndices],
           isSwapping: true,
           activeLines: [12, 13],
-          explanation: `${arr[i]} < pivot, đưa nó về phía bên trái vùng đang xét.`,
+          explanation: lang === 'en' ? `${arr[i]} < pivot, move it to the left region.` : `${arr[i]} < pivot, đưa nó về phía bên trái vùng đang xét.`,
           range: [low, high]
         });
       }
@@ -274,7 +274,7 @@ const generateQuickSortSteps = (initialArr: number[]): Step[] => {
       sortedIndices: [...sortedIndices],
       isSwapping: true,
       activeLines: [14],
-      explanation: `Đưa pivot (${pivot}) về đúng vị trí phân tách [${i + 1}].`,
+      explanation: lang === 'en' ? `Move pivot (${pivot}) to correct split position [${i + 1}].` : `Đưa pivot (${pivot}) về đúng vị trí phân tách [${i + 1}].`,
       range: [low, high]
     });
     return i + 1;
@@ -298,7 +298,7 @@ const generateQuickSortSteps = (initialArr: number[]): Step[] => {
     sortedIndices: Array.from({length: arr.length}, (_, k) => k),
     isSwapping: false,
     activeLines: [],
-    explanation: "Quick Sort hoàn tất!"
+    explanation: lang === 'en' ? "Quick Sort completed!" : "Quick Sort hoàn tất!"
   });
   return steps;
 };
@@ -313,7 +313,7 @@ const mergeSortCode = `def merge_sort(arr):
         merge_sort(R)
         # Merge logic...`;
 
-const generateMergeSortSteps = (initialArr: number[]): Step[] => {
+const generateMergeSortSteps = (initialArr: number[], lang: string = 'vi'): Step[] => {
   let arr = [...initialArr];
   let steps: Step[] = [];
   let sortedIndices: number[] = [];
@@ -330,7 +330,7 @@ const generateMergeSortSteps = (initialArr: number[]): Step[] => {
       sortedIndices: [...sortedIndices],
       isSwapping: false,
       activeLines: [],
-      explanation: `Đang trộn vùng [${l}-${m}] và [${m+1}-${r}].`,
+      explanation: lang === 'en' ? `Merging region [${l}-${m}] and [${m+1}-${r}].` : `Đang trộn vùng [${l}-${m}] và [${m+1}-${r}].`,
       range: [l, r]
     });
 
@@ -342,7 +342,7 @@ const generateMergeSortSteps = (initialArr: number[]): Step[] => {
         sortedIndices: [...sortedIndices],
         isSwapping: false,
         activeLines: [],
-        explanation: `So sánh ${L[i]} và ${R[j]}.`,
+        explanation: lang === 'en' ? `Compare ${L[i]} and ${R[j]}.` : `So sánh ${L[i]} và ${R[j]}.`,
         range: [l, r]
       });
 
@@ -360,7 +360,7 @@ const generateMergeSortSteps = (initialArr: number[]): Step[] => {
         sortedIndices: [...sortedIndices],
         isSwapping: true,
         activeLines: [],
-        explanation: `Đưa giá trị nhỏ hơn vào vị trí [${k - 1}].`,
+        explanation: lang === 'en' ? `Place smaller value down to position [${k - 1}].` : `Đưa giá trị nhỏ hơn vào vị trí [${k - 1}].`,
         range: [l, r]
       });
     }
@@ -374,7 +374,7 @@ const generateMergeSortSteps = (initialArr: number[]): Step[] => {
         sortedIndices: [...sortedIndices],
         isSwapping: true,
         activeLines: [],
-        explanation: `Đưa phần còn lại của mảng trái vào mảng chính.`,
+        explanation: lang === 'en' ? `Place remaining elements from left sub-array into main array.` : `Đưa phần còn lại của mảng trái vào mảng chính.`,
         range: [l, r]
       });
     }
@@ -387,7 +387,7 @@ const generateMergeSortSteps = (initialArr: number[]): Step[] => {
         sortedIndices: [...sortedIndices],
         isSwapping: true,
         activeLines: [],
-        explanation: `Đưa phần còn lại của mảng phải vào mảng chính.`,
+        explanation: lang === 'en' ? `Place remaining elements from right sub-array into main array.` : `Đưa phần còn lại của mảng phải vào mảng chính.`,
         range: [l, r]
       });
     }
@@ -409,7 +409,7 @@ const generateMergeSortSteps = (initialArr: number[]): Step[] => {
     sortedIndices: Array.from({length: arr.length}, (_, k) => k),
     isSwapping: false,
     activeLines: [],
-    explanation: "Merge Sort hoàn tất!"
+    explanation: lang === 'en' ? "Merge Sort completed!" : "Merge Sort hoàn tất!"
   });
   return steps;
 };
@@ -422,7 +422,7 @@ const countingSortCode = `def counting_sort(arr):
         count[x] += 1
     # Reconstruct array...`;
 
-const generateCountingSortSteps = (initialArr: number[]): Step[] => {
+const generateCountingSortSteps = (initialArr: number[], lang: string = 'vi'): Step[] => {
   let arr = [...initialArr];
   let steps: Step[] = [];
   let maxVal = Math.max(...arr);
@@ -434,7 +434,7 @@ const generateCountingSortSteps = (initialArr: number[]): Step[] => {
     sortedIndices: [],
     isSwapping: false,
     activeLines: [1, 2, 3],
-    explanation: `Tìm giá trị lớn nhất (${maxVal}) và khởi tạo mảng đếm.`,
+    explanation: lang === 'en' ? `Find maximum value (${maxVal}) and initialized count array.` : `Tìm giá trị lớn nhất (${maxVal}) và khởi tạo mảng đếm.`,
     auxiliaryArray: [...count]
   });
 
@@ -446,7 +446,7 @@ const generateCountingSortSteps = (initialArr: number[]): Step[] => {
       sortedIndices: [],
       isSwapping: false,
       activeLines: [4, 5],
-      explanation: `Đếm phần tử ${arr[i]}. count[${arr[i]}] = ${count[arr[i]]}.`,
+      explanation: lang === 'en' ? `Count element ${arr[i]}. count[${arr[i]}] = ${count[arr[i]]}.` : `Đếm phần tử ${arr[i]}. count[${arr[i]}] = ${count[arr[i]]}.`,
       auxiliaryArray: [...count]
     });
   }
@@ -463,7 +463,7 @@ const generateCountingSortSteps = (initialArr: number[]): Step[] => {
         sortedIndices: Array.from({length: k}, (_, idx) => idx),
         isSwapping: true,
         activeLines: [],
-        explanation: `Đưa giá trị ${i} trở lại mảng chính.`,
+        explanation: lang === 'en' ? `Put value ${i} back to main array.` : `Đưa giá trị ${i} trở lại mảng chính.`,
         auxiliaryArray: [...count]
       });
     }
