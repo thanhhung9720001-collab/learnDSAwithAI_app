@@ -433,7 +433,7 @@ const generateInterpolationSearchSteps = (initialArr: number[], textLang: string
     sortedIndices: [],
     isSwapping: false,
     activeLines: getLines(codeLang, [2, 3], [2], [2], [2]),
-    explanation: textLang === 'en' ? `Initialize lo pointing to 0, hi pointing to ${hi}.` : `Khởi tạo lo ở đầu mảng, hi ở cuối mảng.`,
+    explanation: textLang === 'en' ? `Initialize lo (low) pointing to 0, hi (high) pointing to ${hi}.` : `Khởi tạo con trỏ lo (low/biên thấp) ở đầu mảng, hi (high/biên cao) ở cuối mảng.`,
     range: [lo, hi]
   });
 
